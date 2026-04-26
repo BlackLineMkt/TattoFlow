@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import Header from '../components/Header'
-import KanbanBoard from '../components/KanbanBoard'
-import LeadTable from '../components/LeadTable'
-import LeadPanel from '../components/LeadPanel'
-import LeadModal from '../components/LeadModal'
+import Header from '../components/layout/Header'
+import KanbanBoard from '../components/kanban/KanbanBoard'
+import LeadTable from '../components/list/LeadTable'
+import LeadPanel from '../components/panels/LeadPanel'
+import NewLeadModal from '../components/modals/NewLeadModal'
 import { useLeads } from '../hooks/useLeads'
 
 function SkeletonCard() {
   return (
-    <div className="rounded-lg overflow-hidden animate-pulse">
-      <div className="h-14 bg-elevated" />
-      <div className="h-9 bg-surface border-t border-elevated/50" />
+    <div className="rounded-md overflow-hidden animate-pulse">
+      <div className="h-16 bg-surface" />
+      <div className="h-8 bg-card border-t border-border" />
     </div>
   )
 }
@@ -19,9 +19,9 @@ function LoadingSkeleton() {
   return (
     <div className="flex gap-4 overflow-x-auto pb-4">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="min-w-[280px] max-w-[280px]">
-          <div className="h-10 bg-elevated rounded-t-lg animate-pulse" />
-          <div className="bg-surface rounded-b-lg p-2 space-y-2 min-h-[120px]">
+        <div key={i} className="min-w-[280px]">
+          <div className="h-10 bg-surface/50 rounded-t-md animate-pulse border border-border" />
+          <div className="bg-card rounded-b-md p-2 space-y-2 min-h-[120px] border border-t-0 border-border">
             {i < 3 && <SkeletonCard />}
           </div>
         </div>
@@ -36,56 +36,45 @@ export default function Dashboard() {
   const [showModal, setShowModal] = useState(false)
 
   const { data: leads = [], isLoading } = useLeads()
-
   const selectedLead = leads.find(l => l.id === selectedLeadId) ?? null
 
-  function handleCardClick(lead) {
-    setSelectedLeadId(lead.id)
-  }
-
-  function handlePanelClose() {
-    setSelectedLeadId(null)
-  }
-
   return (
-    <div className="flex flex-col h-screen bg-bg text-primary font-sans overflow-hidden">
-      <Header view={view} onViewChange={setView} />
+    <div className="flex flex-col h-screen bg-bg text-text font-sans overflow-hidden">
+      <Header
+        view={view}
+        onViewChange={setView}
+        onNewLead={() => setShowModal(true)}
+      />
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Main content */}
         <div className="flex-1 overflow-auto p-4">
           {isLoading ? (
             <LoadingSkeleton />
           ) : view === 'kanban' ? (
-            <KanbanBoard leads={leads} onCardClick={handleCardClick} />
+            <KanbanBoard leads={leads} onCardClick={l => setSelectedLeadId(l.id)} />
           ) : (
-            <LeadTable leads={leads} onRowClick={handleCardClick} />
+            <LeadTable leads={leads} onRowClick={l => setSelectedLeadId(l.id)} />
           )}
         </div>
 
-        {/* Push side panel */}
         {selectedLead && (
-          <div className="w-96 flex-shrink-0 border-l border-elevated overflow-hidden">
-            <LeadPanel
-              key={selectedLead.id}
-              lead={selectedLead}
-              onClose={handlePanelClose}
+          <>
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setSelectedLeadId(null)}
             />
-          </div>
+            <div className="w-80 flex-shrink-0 border-l border-border overflow-hidden z-20 relative">
+              <LeadPanel
+                key={selectedLead.id}
+                lead={selectedLead}
+                onClose={() => setSelectedLeadId(null)}
+              />
+            </div>
+          </>
         )}
       </div>
 
-      {/* FAB — "+ Novo Lead" */}
-      <button
-        onClick={() => setShowModal(true)}
-        className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-accent text-white shadow-xl flex items-center justify-center text-3xl hover:bg-accent/90 active:scale-95 transition-all z-10"
-        title="Novo Lead"
-        aria-label="Novo Lead"
-      >
-        +
-      </button>
-
-      {showModal && <LeadModal onClose={() => setShowModal(false)} />}
+      {showModal && <NewLeadModal onClose={() => setShowModal(false)} />}
     </div>
   )
 }
