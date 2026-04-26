@@ -6,17 +6,17 @@ export const supabase = createClient(
 )
 
 export const STAGES = [
-  { id: 'novo',      label: '🟣 Novo Lead',        color: '#7c3aed' },
-  { id: 'contato',   label: '🔵 Contato Feito',     color: '#3b82f6' },
-  { id: 'orcamento', label: '🟡 Orçamento Enviado', color: '#eab308' },
-  { id: 'agendado',  label: '🟠 Agendado',          color: '#f97316' },
-  { id: 'fechado',   label: '🟢 Fechado',           color: '#22c55e' },
-  { id: 'perdido',   label: '🔴 Perdido',           color: '#ef4444' },
+  { id: 'novo',      label: 'Novo Lead',          color: '#7C3AED' },
+  { id: 'contato',   label: 'Contato Feito',       color: '#2563EB' },
+  { id: 'orcamento', label: 'Orçamento Enviado',   color: '#C8A84B' },
+  { id: 'agendado',  label: 'Agendado',            color: '#EA580C' },
+  { id: 'fechado',   label: 'Fechado',             color: '#059669' },
+  { id: 'perdido',   label: 'Perdido',             color: '#DC2626' },
 ]
 
 export const ORIGINS = [
-  { id: 'anuncio',   label: 'Anúncio',      icon: '📢' },
-  { id: 'lp',        label: 'Landing Page', icon: '🔗' },
-  { id: 'organico',  label: 'Orgânico',     icon: '🌱' },
-  { id: 'indicacao', label: 'Indicação',    icon: '👥' },
+  { id: 'anuncio',   label: 'Anúncio Meta' },
+  { id: 'lp',        label: 'Landing Page' },
+  { id: 'organico',  label: 'Orgânico' },
+  { id: 'indicacao', label: 'Indicação' },
 ]
