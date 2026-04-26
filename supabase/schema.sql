@@ -52,7 +52,10 @@ create or replace function handle_new_user()
 returns trigger as $$
 begin
   insert into profiles (id, studio_name)
-  values (new.id, new.raw_user_meta_data ->> 'studio_name');
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data ->> 'studio_name', 'Meu Estúdio')
+  );
   return new;
 end;
 $$ language plpgsql security definer;
