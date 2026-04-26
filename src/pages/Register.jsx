@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import Input from '../components/ui/Input'
+import Button from '../components/ui/Button'
 
 export default function Register() {
   const [studioName, setStudioName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
@@ -13,6 +16,10 @@ export default function Register() {
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem')
+      return
+    }
     setLoading(true)
     const { error } = await supabase.auth.signUp({
       email,
@@ -28,14 +35,13 @@ export default function Register() {
     return (
       <div className="min-h-screen bg-bg flex items-center justify-center p-4">
         <div className="w-full max-w-sm text-center">
-          <h1 className="text-2xl font-bold text-accent mb-3">TattooFlow</h1>
-          <p className="text-primary font-medium">Conta criada com sucesso!</p>
+          <h1 className="text-4xl font-bold text-text mb-4">
+            Tattoo<span className="text-gold">Flow</span>
+          </h1>
+          <p className="text-text font-medium">Conta criada com sucesso!</p>
           <p className="text-muted text-sm mt-2">
-            Verifique seu email para confirmar e depois{' '}
-            <Link to="/login" className="text-accent-light hover:underline">
-              faça login
-            </Link>
-            .
+            Verifique seu email e depois{' '}
+            <Link to="/login" className="text-gold hover:underline">faça login</Link>.
           </p>
         </div>
       </div>
@@ -45,73 +51,64 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-accent">TattooFlow</h1>
-          <p className="text-muted text-sm mt-1">Crie a conta do seu estúdio</p>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-text">
+            Tattoo<span className="text-gold">Flow</span>
+          </h1>
+          <p className="text-muted text-sm mt-2">CRM para estúdios de tatuagem</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
-              Nome do Estúdio
-            </label>
-            <input
+        <div className="bg-card border border-border rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Nome do Estúdio"
               type="text"
               value={studioName}
               onChange={e => setStudioName(e.target.value)}
               required
-              className="w-full bg-surface border border-elevated rounded-lg px-3 py-2.5 text-primary text-sm focus:outline-none focus:border-accent transition-colors"
               placeholder="Ex: Dark Art Tattoo"
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
-              Email
-            </label>
-            <input
+            <Input
+              label="Email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="w-full bg-surface border border-elevated rounded-lg px-3 py-2.5 text-primary text-sm focus:outline-none focus:border-accent transition-colors"
+              placeholder="seu@email.com"
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
-              Senha
-            </label>
-            <input
+            <Input
+              label="Senha"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full bg-surface border border-elevated rounded-lg px-3 py-2.5 text-primary text-sm focus:outline-none focus:border-accent transition-colors"
+              placeholder="Mínimo 6 caracteres"
             />
-          </div>
+            <Input
+              label="Confirmar Senha"
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              placeholder="Repita a senha"
+            />
 
-          {error && (
-            <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
-              {error}
-            </p>
-          )}
+            {error && (
+              <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-accent hover:bg-accent/90 text-white font-medium py-2.5 rounded-lg text-sm disabled:opacity-50 transition-colors"
-          >
-            {loading ? 'Criando conta...' : 'Criar conta'}
-          </button>
-        </form>
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? 'Criando conta...' : 'Criar conta'}
+            </Button>
+          </form>
+        </div>
 
         <p className="text-muted text-sm text-center mt-6">
           Já tem conta?{' '}
-          <Link to="/login" className="text-accent-light hover:underline">
-            Entrar
-          </Link>
+          <Link to="/login" className="text-gold hover:underline">Entrar</Link>
         </p>
       </div>
     </div>

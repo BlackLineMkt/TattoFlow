@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import Input from '../components/ui/Input'
+import Button from '../components/ui/Button'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -20,56 +22,47 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-accent">TattooFlow</h1>
-          <p className="text-muted text-sm mt-1">Acesse o CRM do seu estúdio</p>
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-text">
+            Tattoo<span className="text-gold">Flow</span>
+          </h1>
+          <p className="text-muted text-sm mt-2">CRM para estúdios de tatuagem</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
-              Email
-            </label>
-            <input
+        <div className="bg-card border border-border rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              label="Email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              className="w-full bg-surface border border-elevated rounded-lg px-3 py-2.5 text-primary text-sm focus:outline-none focus:border-accent transition-colors"
+              placeholder="seu@email.com"
             />
-          </div>
-
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wider">
-              Senha
-            </label>
-            <input
+            <Input
+              label="Senha"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              className="w-full bg-surface border border-elevated rounded-lg px-3 py-2.5 text-primary text-sm focus:outline-none focus:border-accent transition-colors"
+              placeholder="••••••••"
             />
-          </div>
 
-          {error && (
-            <p className="text-red-400 text-sm bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
-              {error}
-            </p>
-          )}
+            {error && (
+              <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">
+                {error}
+              </p>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-accent hover:bg-accent/90 text-white font-medium py-2.5 rounded-lg text-sm disabled:opacity-50 transition-colors"
-          >
-            {loading ? 'Entrando...' : 'Entrar'}
-          </button>
-        </form>
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? 'Entrando...' : 'Entrar'}
+            </Button>
+          </form>
+        </div>
 
         <p className="text-muted text-sm text-center mt-6">
           Estúdio novo?{' '}
-          <Link to="/register" className="text-accent-light hover:underline">
+          <Link to="/register" className="text-gold hover:underline">
             Criar conta
           </Link>
         </p>
