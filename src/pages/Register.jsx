@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
+import Footer from '../components/layout/Footer'
 
 export default function Register() {
   const [studioName, setStudioName] = useState('')
@@ -110,6 +111,8 @@ export default function Register() {
           Já tem conta?{' '}
           <Link to="/login" className="text-gold hover:underline">Entrar</Link>
         </p>
+
+        <Footer />
       </div>
     </div>
   )

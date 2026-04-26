@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
+import Footer from '../components/layout/Footer'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -66,6 +67,8 @@ export default function Login() {
             Criar conta
           </Link>
         </p>
+
+        <Footer />
       </div>
     </div>
   )

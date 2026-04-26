@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/layout/Header'
+import Footer from '../components/layout/Footer'
 import KanbanBoard from '../components/kanban/KanbanBoard'
 import LeadTable from '../components/list/LeadTable'
 import LeadPanel from '../components/panels/LeadPanel'
@@ -73,6 +74,8 @@ export default function Dashboard() {
           </>
         )}
       </div>
+
+      <Footer compact />
 
       {showModal && <NewLeadModal onClose={() => setShowModal(false)} />}
     </div>
