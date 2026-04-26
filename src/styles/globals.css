@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-gold:        #C8A84B;
+  --color-gold-dim:    #C8A84B22;
+  --color-gold-border: #C8A84B44;
+  --color-bg:          #0D0D0D;
+  --color-card:        #111111;
+  --color-surface:     #1A1A1A;
+  --color-border:      #2A2A2A;
+  --color-text:        #FFFFFF;
+  --color-text-muted:  #888888;
+  --color-text-dim:    #555555;
+
+  --stage-novo:      #7C3AED;
+  --stage-contato:   #2563EB;
+  --stage-orcamento: #C8A84B;
+  --stage-agendado:  #EA580C;
+  --stage-fechado:   #059669;
+  --stage-perdido:   #DC2626;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2A2A2A #1A1A1A;
+}
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-track { background: #1A1A1A; }
+*::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+
+body {
+  background: #0D0D0D;
+  color: #FFFFFF;
+  font-family: 'Inter', system-ui, sans-serif;
+}
