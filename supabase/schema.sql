@@ -2,7 +2,7 @@
 create extension if not exists "pgcrypto";
 
 -- Enums
-create type lead_origin as enum ('anuncio', 'lp', 'organico', 'indicacao');
+create type lead_origin as enum ('anuncio', 'lp', 'organico', 'indicacao', 'whatsapp_meta');
 create type lead_stage  as enum ('novo', 'contato', 'orcamento', 'agendado', 'fechado', 'perdido');
 
 -- profiles: one per authenticated user / studio
