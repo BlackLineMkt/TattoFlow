@@ -98,7 +98,7 @@ export default function NewLeadModal({ onClose }) {
             Manual
           </button>
           <button
-            onClick={() => setTab('whatsapp')}
+            onClick={() => { setTab('whatsapp'); setParseError('') }}
             className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
               tab === 'whatsapp'
                 ? 'text-gold border-b-2 border-gold'
