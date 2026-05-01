@@ -1,0 +1,2 @@
+[functions.receive-lead]
+verify_jwt = false
