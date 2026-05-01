@@ -15,8 +15,9 @@ export const STAGES = [
 ]
 
 export const ORIGINS = [
-  { id: 'anuncio',   label: 'Anúncio Meta' },
-  { id: 'lp',        label: 'Landing Page' },
-  { id: 'organico',  label: 'Orgânico' },
-  { id: 'indicacao', label: 'Indicação' },
+  { id: 'anuncio',       label: 'Anúncio Meta' },
+  { id: 'lp',            label: 'Landing Page' },
+  { id: 'organico',      label: 'Orgânico' },
+  { id: 'indicacao',     label: 'Indicação' },
+  { id: 'whatsapp_meta', label: 'WhatsApp / Meta' },
 ]
