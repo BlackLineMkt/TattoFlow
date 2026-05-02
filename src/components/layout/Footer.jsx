@@ -6,7 +6,6 @@ export default function Footer({ compact = false }) {
           src="/bl-logo.png"
           alt="Black Line Agency"
           className="h-5 w-auto opacity-80"
-          style={{ filter: 'brightness(1.1)' }}
         />
         <span className="text-dim text-[10px] tracking-wider">
           © 2026 Black Line Agency · Especialistas em estúdios de tatuagem
@@ -21,7 +20,6 @@ export default function Footer({ compact = false }) {
         src="/bl-logo.png"
         alt="Black Line Agency"
         className="h-14 w-auto opacity-90"
-        style={{ filter: 'brightness(1.05)' }}
       />
 
       <div className="text-center space-y-0.5">
