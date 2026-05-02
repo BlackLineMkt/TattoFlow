@@ -25,7 +25,10 @@ export default function Register() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { studio_name: studioName } },
+      options: {
+        data: { studio_name: studioName },
+        emailRedirectTo: window.location.origin,
+      },
     })
     if (error) setError(error.message)
     else setDone(true)
@@ -41,8 +44,12 @@ export default function Register() {
           </h1>
           <p className="text-text font-medium">Conta criada com sucesso!</p>
           <p className="text-muted text-sm mt-2">
-            Verifique seu email e depois{' '}
-            <Link to="/login" className="text-gold hover:underline">faça login</Link>.
+            Clique no link enviado para seu email para ativar a conta.
+            Você será redirecionado automaticamente.
+          </p>
+          <p className="text-muted text-sm mt-3">
+            Abriu o email em outro dispositivo?{' '}
+            <Link to="/login" className="text-gold hover:underline">Fazer login manualmente</Link>.
           </p>
         </div>
       </div>
