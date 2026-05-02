@@ -5,7 +5,7 @@ export default function Footer({ compact = false }) {
         <img
           src="/bl-logo.png"
           alt="Black Line Agency"
-          className="h-10 w-auto opacity-100"
+          className="h-14 w-auto opacity-100"
         />
         <span className="text-dim text-[10px] tracking-wider">
           © 2026 Black Line Agency · Especialistas em estúdios de tatuagem
@@ -15,7 +15,7 @@ export default function Footer({ compact = false }) {
   }
 
   return (
-    <footer className="mt-10 border-t border-border/50 pt-8 pb-6 flex flex-col items-center gap-4">
+    <footer className="mt-4 border-t border-border/50 pt-4 pb-4 flex flex-col items-center gap-3">
       <img
         src="/bl-logo.png"
         alt="Black Line Agency"
