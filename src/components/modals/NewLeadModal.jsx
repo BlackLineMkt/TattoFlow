@@ -24,11 +24,12 @@ function parseWhatsApp(text) {
     }
   }
 
-  const phoneMatch = text.match(/(?:\+?55\s?)?(\(?\d{2}\)?\s?\d{4,5}[\s-]?\d{4})/)
+  // Handles: (11) 98765-4321 | 11987654321 | +5511987654321 | 55 11 98765-4321
+  const phoneMatch = text.match(/(?:\+?55[\s.-]?)?(\(?\d{2}\)?[\s.-]?\d{4,5}[\s.-]?\d{4})/)
   let phone = ''
   if (phoneMatch) {
     phone = phoneMatch[0].replace(/\D/g, '')
-    if (phone.startsWith('55') && phone.length === 13) {
+    if (phone.startsWith('55') && phone.length >= 12) {
       phone = phone.slice(2)
     }
   }
@@ -115,7 +116,7 @@ export default function NewLeadModal({ onClose }) {
               Cole a conversa do WhatsApp abaixo. Vamos tentar extrair o nome e o telefone automaticamente.
             </p>
             <textarea
-              className="w-full h-40 bg-background border border-border rounded-md px-3 py-2 text-sm text-text placeholder:text-muted resize-none focus:outline-none focus:ring-1 focus:ring-gold"
+              className="w-full h-40 bg-card border border-border rounded-md px-3 py-2 text-sm text-text placeholder:text-dim resize-none focus:outline-none focus:ring-1 focus:ring-gold"
               placeholder={"Exemplo:\n12/04/2025, 14:32 - João Silva: Olá, meu nome é João Silva, meu telefone é (11) 99999-8888"}
               value={conversation}
               onChange={e => setConversation(e.target.value)}

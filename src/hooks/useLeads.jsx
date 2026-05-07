@@ -59,10 +59,12 @@ export function useCreateLead() {
 export function useMoveLeadStage() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ lead, toStage }) => {
+    mutationFn: async ({ lead, toStage, dealValue }) => {
+      const updates = { stage: toStage }
+      if (dealValue !== undefined) updates.deal_value = dealValue
       const { error } = await supabase
         .from('leads')
-        .update({ stage: toStage })
+        .update(updates)
         .eq('id', lead.id)
       if (error) throw error
       await supabase.from('lead_history').insert({
@@ -113,5 +115,23 @@ export function useDeleteLead() {
       toast.success('Lead excluído')
     },
     onError: () => toast.error('Erro ao excluir lead'),
+  })
+}
+
+export function useUpdateLead() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, ...fields }) => {
+      const { error } = await supabase
+        .from('leads')
+        .update(fields)
+        .eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['leads'] })
+      toast.success('Salvo ✓', { duration: 1500 })
+    },
+    onError: () => toast.error('Erro ao atualizar lead'),
   })
 }

@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Phone } from 'lucide-react'
+import { Phone, DollarSign } from 'lucide-react'
 import { ORIGINS } from '../../lib/supabase'
 import { formatPhone, getDaysSince, isLate } from '../../lib/helpers'
 
@@ -8,6 +8,13 @@ function daysLabel(n) {
   if (n === 0) return 'hoje'
   if (n === 1) return 'há 1 dia'
   return `há ${n} dias`
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(value)
 }
 
 export default function LeadCard({ lead, onClick }) {
@@ -38,6 +45,13 @@ export default function LeadCard({ lead, onClick }) {
         <Phone size={11} />
         <span>{formatPhone(lead.phone)}</span>
       </div>
+
+      {lead.deal_value != null && (
+        <div className="flex items-center gap-1.5 text-xs mb-2 text-emerald-400 font-semibold">
+          <DollarSign size={11} />
+          <span>{formatCurrency(lead.deal_value)}</span>
+        </div>
+      )}
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">
