@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Plus, LogOut } from 'lucide-react'
+import { Plus, LogOut, SlidersHorizontal } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useProfile } from '../../hooks/useProfile'
 
-export default function Header({ view, onViewChange, onNewLead }) {
+export default function Header({ view, onViewChange, onNewLead, onToggleFilters, hasActiveFilters }) {
   const { data: profile } = useProfile()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const initial = profile?.studio_name?.[0]?.toUpperCase() ?? '?'
@@ -49,27 +49,47 @@ export default function Header({ view, onViewChange, onNewLead }) {
       <div className="flex items-center gap-3">
         <button
           onClick={onNewLead}
-          className="flex items-center gap-1.5 bg-gold text-black font-bold text-sm px-4 py-2 rounded-md hover:bg-gold/90 transition-all duration-200"
+          className="flex items-center gap-1.5 bg-gold text-black font-bold text-sm px-4 py-2 rounded-md hover:bg-gold/90
+            transition-all duration-200"
         >
           <Plus size={16} strokeWidth={2.5} />
           Novo Lead
+        </button>
+
+        {/* Botão de filtros */}
+        <button
+          onClick={onToggleFilters}
+          className={`relative flex items-center justify-center w-9 h-9 rounded-md border transition-all duration-200 ${
+            hasActiveFilters
+              ? 'bg-gold/10 border-gold text-gold'
+              : 'bg-transparent border-border text-muted hover:text-text hover:border-muted'
+          }`}
+          title="Filtros"
+        >
+          <SlidersHorizontal size={16} />
+          {hasActiveFilters && (
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-gold" />
+          )}
         </button>
 
         {/* Avatar dropdown */}
         <div className="relative">
           <button
             onClick={() => setDropdownOpen(o => !o)}
-            className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold text-sm font-bold hover:bg-gold/30 transition-all"
+            className="w-8 h-8 rounded-full bg-gold/20 border border-gold/30 flex items-center justify-center text-gold
+              text-sm font-bold hover:bg-gold/30 transition-all"
           >
             {initial}
           </button>
           {dropdownOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setDropdownOpen(false)} />
-              <div className="absolute right-0 top-10 z-20 bg-surface border border-border rounded-lg shadow-2xl min-w-[140px] py-1">
+              <div className="absolute right-0 top-10 z-20 bg-surface border border-border rounded-lg shadow-2xl
+                min-w-[140px] py-1">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted hover:text-text hover:bg-card transition-colors"
+                  className="flex items-center gap-2 w-full px-4 py-2 text-sm text-muted hover:text-text hover:bg-card
+                    transition-colors"
                 >
                   <LogOut size={14} />
                   Sair

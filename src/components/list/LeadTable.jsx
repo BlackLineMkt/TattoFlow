@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react'
 import { STAGES, ORIGINS } from '../../lib/supabase'
 import { formatPhone, getDaysSince } from '../../lib/helpers'
-import LeadFilters from './LeadFilters'
 
 function SortIcon({ active, dir }) {
   if (!active) return <ChevronsUpDown size={12} className="text-dim" />
@@ -12,9 +11,6 @@ function SortIcon({ active, dir }) {
 }
 
 export default function LeadTable({ leads, onRowClick }) {
-  const [stageFilter, setStageFilter] = useState([])
-  const [originFilter, setOriginFilter] = useState([])
-  const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('created_at')
   const [sortDir, setSortDir] = useState('desc')
 
@@ -23,16 +19,12 @@ export default function LeadTable({ leads, onRowClick }) {
     else { setSortBy(col); setSortDir('asc') }
   }
 
-  const filtered = leads
-    .filter(l => stageFilter.length === 0 || stageFilter.includes(l.stage))
-    .filter(l => originFilter.length === 0 || originFilter.includes(l.origin))
-    .filter(l => !search || l.name.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => {
-      const dir = sortDir === 'asc' ? 1 : -1
-      if (sortBy === 'name') return a.name.localeCompare(b.name, 'pt-BR') * dir
-      if (sortBy === 'days') return (getDaysSince(a.created_at) - getDaysSince(b.created_at)) * dir
-      return (new Date(a.created_at) - new Date(b.created_at)) * dir
-    })
+  const sorted = [...leads].sort((a, b) => {
+    const dir = sortDir === 'asc' ? 1 : -1
+    if (sortBy === 'name') return a.name.localeCompare(b.name, 'pt-BR') * dir
+    if (sortBy === 'days') return (getDaysSince(a.created_at) - getDaysSince(b.created_at)) * dir
+    return (new Date(a.created_at) - new Date(b.created_at)) * dir
+  })
 
   const columns = [
     { key: 'name',       label: 'Nome',         sortable: true },
@@ -45,14 +37,8 @@ export default function LeadTable({ leads, onRowClick }) {
 
   return (
     <div className="flex flex-col gap-4 pb-20">
-      <LeadFilters
-        stageFilter={stageFilter} setStageFilter={setStageFilter}
-        originFilter={originFilter} setOriginFilter={setOriginFilter}
-        search={search} setSearch={setSearch}
-      />
-
       <p className="text-xs text-muted px-1">
-        {filtered.length} lead{filtered.length !== 1 ? 's' : ''} encontrado{filtered.length !== 1 ? 's' : ''}
+        {sorted.length} lead{sorted.length !== 1 ? 's' : ''} encontrado{sorted.length !== 1 ? 's' : ''}
       </p>
 
       <div className="bg-card border border-border rounded-md overflow-hidden">
@@ -77,7 +63,7 @@ export default function LeadTable({ leads, onRowClick }) {
               </tr>
             </thead>
             <tbody>
-              {filtered.map((lead, idx) => {
+              {sorted.map((lead, idx) => {
                 const stage = STAGES.find(s => s.id === lead.stage)
                 const origin = ORIGINS.find(o => o.id === lead.origin)
                 const days = getDaysSince(lead.created_at)
@@ -112,7 +98,7 @@ export default function LeadTable({ leads, onRowClick }) {
             </tbody>
           </table>
 
-          {filtered.length === 0 && (
+          {sorted.length === 0 && (
             <div className="py-12 text-center">
               <p className="text-muted text-sm">Nenhum lead encontrado.</p>
               <p className="text-dim text-xs mt-1">Tente ajustar os filtros.</p>

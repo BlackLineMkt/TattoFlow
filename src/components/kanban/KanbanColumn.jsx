@@ -6,7 +6,7 @@ export default function KanbanColumn({ stage, leads, onCardClick }) {
   const { setNodeRef, isOver } = useDroppable({ id: stage.id })
 
   return (
-    <div className="flex flex-col min-w-[280px] max-w-[280px]">
+    <div className="flex flex-col min-w-[200px] flex-1">
       {/* Header */}
       <div
         className={`flex items-center justify-between px-3 py-2.5 rounded-t-md border transition-all duration-200 ${

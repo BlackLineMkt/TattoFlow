@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Header from '../components/layout/Header'
 import Footer from '../components/layout/Footer'
 import KanbanBoard from '../components/kanban/KanbanBoard'
 import LeadTable from '../components/list/LeadTable'
 import LeadPanel from '../components/panels/LeadPanel'
+import LeadFilters from '../components/list/LeadFilters'
 import NewLeadModal from '../components/modals/NewLeadModal'
 import { useLeads } from '../hooks/useLeads'
 
@@ -31,13 +32,76 @@ function LoadingSkeleton() {
   )
 }
 
+function getStartOf(period) {
+  const now = new Date()
+  if (period === 'week') {
+    const day = now.getDay()
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1)
+    return new Date(now.setDate(diff))
+  }
+  if (period === 'month') {
+    return new Date(now.getFullYear(), now.getMonth(), 1)
+  }
+  if (period === 'last_month') {
+    return new Date(now.getFullYear(), now.getMonth() - 1, 1)
+  }
+  return null
+}
+
+function getEndOf(period) {
+  const now = new Date()
+  if (period === 'last_month') {
+    return new Date(now.getFullYear(), now.getMonth(), 0)
+  }
+  return null
+}
+
 export default function Dashboard() {
   const [view, setView] = useState('kanban')
   const [selectedLeadId, setSelectedLeadId] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  const [showFilters, setShowFilters] = useState(false)
+
+  const [search, setSearch] = useState('')
+  const [stageFilter, setStageFilter] = useState([])
+  const [originFilter, setOriginFilter] = useState([])
+  const [periodFilter, setPeriodFilter] = useState('all')
 
   const { data: leads = [], isLoading } = useLeads()
   const selectedLead = leads.find(l => l.id === selectedLeadId) ?? null
+
+  const filteredLeads = useMemo(() => {
+    let result = leads
+
+    if (search.trim()) {
+      result = result.filter(l =>
+        l.name.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+
+    if (stageFilter.length > 0) {
+      result = result.filter(l => stageFilter.includes(l.stage))
+    }
+
+    if (originFilter.length > 0) {
+      result = result.filter(l => originFilter.includes(l.origin))
+    }
+
+    if (periodFilter !== 'all') {
+      const start = getStartOf(periodFilter)
+      const end = getEndOf(periodFilter)
+      result = result.filter(l => {
+        const date = new Date(l.created_at)
+        if (start && date < start) return false
+        if (end && date > end) return false
+        return true
+      })
+    }
+
+    return result
+  }, [leads, search, stageFilter, originFilter, periodFilter])
+
+  const hasActiveFilters = search || stageFilter.length > 0 || originFilter.length > 0 || periodFilter !== 'all'
 
   return (
     <div className="flex flex-col h-screen bg-bg text-text font-sans overflow-hidden">
@@ -45,16 +109,28 @@ export default function Dashboard() {
         view={view}
         onViewChange={setView}
         onNewLead={() => setShowModal(true)}
+        onToggleFilters={() => setShowFilters(v => !v)}
+        hasActiveFilters={hasActiveFilters}
       />
 
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto p-4 space-y-4">
+
+          {showFilters && (
+            <LeadFilters
+              search={search} setSearch={setSearch}
+              stageFilter={stageFilter} setStageFilter={setStageFilter}
+              originFilter={originFilter} setOriginFilter={setOriginFilter}
+              periodFilter={periodFilter} setPeriodFilter={setPeriodFilter}
+            />
+          )}
+
           {isLoading ? (
             <LoadingSkeleton />
           ) : view === 'kanban' ? (
-            <KanbanBoard leads={leads} onCardClick={l => setSelectedLeadId(l.id)} />
+            <KanbanBoard leads={filteredLeads} onCardClick={l => setSelectedLeadId(l.id)} />
           ) : (
-            <LeadTable leads={leads} onRowClick={l => setSelectedLeadId(l.id)} />
+            <LeadTable leads={filteredLeads} onRowClick={l => setSelectedLeadId(l.id)} />
           )}
         </div>
 

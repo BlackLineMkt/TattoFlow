@@ -68,7 +68,7 @@ export default function KanbanBoard({ leads, onCardClick }) {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-4 overflow-x-auto pb-4 h-full items-start">
+        <div className="flex gap-3 pb-4 h-full items-start w-full">
           {STAGES.map(stage => (
             <KanbanColumn
               key={stage.id}
