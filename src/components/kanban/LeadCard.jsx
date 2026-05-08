@@ -39,7 +39,14 @@ export default function LeadCard({ lead, onClick }) {
       {...attributes}
       {...listeners}
     >
-      <p className="font-bold text-text text-sm leading-tight mb-2">{lead.name}</p>
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <p className="font-bold text-text text-sm leading-tight">{lead.name}</p>
+        {lead.plan_interest && (
+          <span className="flex-shrink-0 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-gold/15 text-gold border border-gold/30">
+            {lead.plan_interest}
+          </span>
+        )}
+      </div>
 
       <div className="flex items-center gap-1.5 text-muted text-xs mb-2">
         <Phone size={11} />

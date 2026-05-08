@@ -63,12 +63,19 @@ export default function LeadPanel({ lead, onClose }) {
       <div className="flex items-start justify-between px-4 py-3 border-b border-border flex-shrink-0">
         <div className="min-w-0 pr-2">
           <h3 className="font-bold text-text truncate">{lead.name}</h3>
-          <span
-            className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm inline-block mt-1"
-            style={{ background: `${stage?.color}22`, color: stage?.color }}
-          >
-            {stage?.label}
-          </span>
+          <div className="flex items-center gap-2 mt-1 flex-wrap">
+            <span
+              className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm inline-block"
+              style={{ background: `${stage?.color}22`, color: stage?.color }}
+            >
+              {stage?.label}
+            </span>
+            {lead.plan_interest && (
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm inline-block bg-gold/15 text-gold border border-gold/30">
+                {lead.plan_interest}
+              </span>
+            )}
+          </div>
         </div>
         <button onClick={onClose} className="text-muted hover:text-text transition-colors flex-shrink-0 mt-0.5">
           <X size={18} />
@@ -99,6 +106,9 @@ export default function LeadPanel({ lead, onClose }) {
             })}
           />
           <InfoRow label="No funil" value={`${totalDays} dia${totalDays !== 1 ? 's' : ''}`} />
+          {lead.plan_interest && (
+            <InfoRow label="Interesse" value={lead.plan_interest} />
+          )}
         </div>
 
         {/* Valor do fechamento */}
